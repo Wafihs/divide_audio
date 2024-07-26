@@ -20,8 +20,6 @@ def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
 def main():
     st.title("Audio File Divider")
 
-    st.set_option('server.fileUploadTimeout', 600)
-
     # Initialize session state for segments if not already present
     if 'segments' not in st.session_state:
         st.session_state.segments = []
