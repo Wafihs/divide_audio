@@ -1,11 +1,40 @@
 import os
 import streamlit as st
+import subprocess
 from pydub import AudioSegment
 from io import BytesIO
 
 # Run setup script to install ffmpeg if it's not already installed
 if not os.path.exists("/usr/bin/ffmpeg"):
     os.system("apt-get update && apt-get install -y ffmpeg")
+
+# Function to install FFmpeg
+def install_ffmpeg():
+    try:
+        subprocess.run(["apt-get", "update"], check=True)
+        subprocess.run(["apt-get", "install", "-y", "ffmpeg"], check=True)
+    except subprocess.CalledProcessError as e:
+        st.error(f"An error occurred while installing FFmpeg: {e}")
+        return False
+    return True
+
+# Check if FFmpeg is installed
+if not os.path.exists('/usr/bin/ffmpeg'):
+    st.write("Installing FFmpeg...")
+    if install_ffmpeg():
+        st.write("FFmpeg installed successfully.")
+    else:
+        st.write("Failed to install FFmpeg.")
+else:
+    st.write("FFmpeg is already installed.")
+
+# Verify FFmpeg installation
+ffmpeg_path = os.popen("which ffmpeg").read().strip()
+if ffmpeg_path:
+    st.write(f"FFmpeg is available at: {ffmpeg_path}")
+else:
+    st.write("FFmpeg is not installed.")
+
 
 # Check if FFmpeg is available
 try:
