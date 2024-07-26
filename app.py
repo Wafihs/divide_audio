@@ -51,7 +51,7 @@ def main():
                 os.remove(temp_file_path)
 
         except Exception as e:
-            st.error(f"Error processing audio file: {e}", type(e).__name__)
+            st.error(f"Error processing audio file: {e} Error type: {type(e).__name__}")
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
 
