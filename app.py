@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from io import BytesIO
 
 ##Work
-
+@st.cache_data
 def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
     segments = []
     part_duration = len(audio) // num_parts
@@ -40,7 +40,7 @@ def main():
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
 
-            num_parts=st.number_input("Enter number of parts (2-4)", min_value=2, max_value=4)
+            num_parts=st.number_input("Enter number of parts (2-4)", min_value=2, max_value=10)
 
             if st.button("Divide"):
                 st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
