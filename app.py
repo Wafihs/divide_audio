@@ -39,7 +39,7 @@ def main():
 
         # Read audio file from uploaded file
         try:
-            audio = AudioSegment.from_file(uploaded_file, format=file_format)
+            audio = AudioSegment.from_file(temp_file, format=file_format)
 
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
