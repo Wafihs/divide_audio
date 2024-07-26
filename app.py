@@ -26,17 +26,23 @@ def main():
         st.write(file_details)
         
         file_format = uploaded_file.name.split('.')[-1]
-        audio = AudioSegment.from_file(uploaded_file, format=file_format)
+        
+        # Read audio file from uploaded file
+        try:
+            audio = AudioSegment.from_file(uploaded_file, format=file_format)
+            
+            # Get duration of the audio in seconds
+            duration = len(audio) // 1000
 
-        # Get duration of the audio in seconds
-        duration = len(audio) // 1000
+            # Input for interval in minutes
+            interval_min = st.number_input("Enter interval in minutes", min_value=1, max_value=duration // 60)
+            interval_ms = interval_min * 60 * 1000
 
-        # Input for interval in minutes
-        interval_min = st.number_input("Enter interval in minutes", min_value=1, max_value=duration // 60)
-        interval_ms = interval_min * 60 * 1000
+            if st.button("Divide"):
+                st.session_state.segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
 
-        if st.button("Divide"):
-            st.session_state.segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
+        except Exception as e:
+            st.error(f"Error processing audio file: {e}")
 
     # Provide download links for the segments
     if st.session_state.segments:
