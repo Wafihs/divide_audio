@@ -57,5 +57,22 @@ def main():
             buffer.seek(0)
             st.download_button(label=f"Download {filename}", data=buffer, file_name=filename, mime=f"audio/{filename.split('.')[-1]}")
 
+# Add footer
+    st.markdown("""
+        <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            color: black;
+            text-align: center;
+        }
+        </style>
+        <div class="footer">
+            <p>Made by Wafi</p>
+        </div>
+        """, unsafe_allow_html=True)
 if __name__ == "__main__":
     main()
