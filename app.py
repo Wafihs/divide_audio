@@ -1,4 +1,5 @@
 import os
+import tempfile
 import streamlit as st
 from pydub import AudioSegment
 from io import BytesIO
@@ -19,6 +20,8 @@ def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
 def main():
     st.title("Audio File Divider")
 
+    st.set_option('server.fileUploadTimeout', 600)
+
     # Initialize session state for segments if not already present
     if 'segments' not in st.session_state:
         st.session_state.segments = []
@@ -33,6 +36,10 @@ def main():
 
         file_format = uploaded_file.name.split('.')[-1]
 
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(uploaded_file.read())
+            temp_file_path = temp_file.name
+
         # Read audio file from uploaded file
         try:
             audio = AudioSegment.from_file(uploaded_file, format=file_format)
@@ -44,9 +51,12 @@ def main():
 
             if st.button("Divide"):
                 st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
+                os.remove(temp_file_path)
 
         except Exception as e:
             st.error(f"Error processing audio file: {e}")
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
 
     # Provide download links for the segments
     if st.session_state.segments:
