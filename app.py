@@ -36,10 +36,9 @@ def main():
 
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
-
-            # Input for interval in minutes
-            interval_min = st.number_input("Enter interval in minutes", min_value=1, max_value=duration // 60)
-            interval_ms = interval_min * 60 * 1000
+            max_duration_mins = duration // 60
+            num_parts=st.number_input("Enter number of parts", min_value=2, max_value=10)
+            interval_ms=(max_duration_mins//num_parts)*60*1000
 
             if st.button("Divide"):
                 st.session_state.segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
