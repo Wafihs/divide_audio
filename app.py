@@ -40,7 +40,7 @@ def main():
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
 
-            num_parts=st.number_input("Enter number of parts", min_value=2, max_value=4)
+            num_parts=st.number_input("Enter number of parts (2-4)", min_value=2, max_value=4)
 
             if st.button("Divide"):
                 st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
@@ -55,7 +55,6 @@ def main():
             buffer = BytesIO()
             segment.export(buffer, format=filename.split('.')[-1])
             buffer.seek(0)
-            st.write(filename)
             st.download_button(label=f"Download {filename}", data=buffer, file_name=filename, mime=f"audio/{filename.split('.')[-1]}")
 
 # Add footer
