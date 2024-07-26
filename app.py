@@ -5,11 +5,14 @@ from io import BytesIO
 
 ##Work
 
-def save_audio_segments(audio, interval, filename_prefix, audio_format):
+def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
     segments = []
-    for i in range(0, len(audio), interval):
-        segment = audio[i:i + interval]
-        segment_file = f"{filename_prefix}_part_{i // interval}.{audio_format}"
+    part_duration = len(audio) // num_parts
+    for i in range(num_parts):
+        start_time = i * part_duration
+        end_time = (i + 1) * part_duration if i != num_parts - 1 else len(audio)
+        segment = audio[start_time:end_time]
+        segment_file = f"{filename_prefix}_part_{i + 1}.{audio_format}"
         segments.append((segment, segment_file))
     return segments
 
@@ -36,12 +39,11 @@ def main():
 
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
-            max_duration_mins = duration // 60
+
             num_parts=st.number_input("Enter number of parts", min_value=2, max_value=10)
-            interval_ms=(max_duration_mins//num_parts)*60*1000
 
             if st.button("Divide"):
-                st.session_state.segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
+                st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
 
         except Exception as e:
             st.error(f"Error processing audio file: {e}")
