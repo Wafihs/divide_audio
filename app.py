@@ -33,13 +33,13 @@ def main():
 
         file_format = uploaded_file.name.split('.')[-1]
 
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file_format}") as temp_file:
             temp_file.write(uploaded_file.read())
             temp_file_path = temp_file.name
 
         # Read audio file from uploaded file
         try:
-            audio = AudioSegment.from_file(temp_file, format=file_format)
+            audio = AudioSegment.from_file(temp_file_path, format=file_format)
 
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
@@ -52,6 +52,9 @@ def main():
 
         except Exception as e:
             st.error(f"Error processing audio file: {e} Error type: {type(e).__name__}")
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
+        finally:
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
 
