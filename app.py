@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import subprocess
 import requests
-import zipfile
+import tarfile
 from pydub import AudioSegment
 from io import BytesIO
 
@@ -19,7 +19,7 @@ def download_ffmpeg():
     if not os.path.exists(ffmpeg_dir):
         os.makedirs(ffmpeg_dir)
     
-    ffmpeg_tar = os.path.join(ffmpeg_dir, "ffmpeg.tar.xz")
+    ffmpeg_tar = os.path.join(ffmpeg_dir, "ffmpeg-7.0.1.tar.xz")
     
     # Download ffmpeg tar file
     with requests.get(url, stream=True) as r:
