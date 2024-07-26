@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import subprocess
 import requests
-import tarfile
+import zipfile
 from pydub import AudioSegment
 from io import BytesIO
 
@@ -10,26 +10,25 @@ from io import BytesIO
 if not os.path.exists("/usr/bin/ffmpeg"):
     os.system("apt-get update && apt-get install -y ffmpeg")
 
-# Function to download and extract FFmpeg
 def download_ffmpeg():
-    url = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-essentials.tar.xz"
+    url = "https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-release-essentials.zip"
     ffmpeg_dir = "ffmpeg"
     
     # Create a directory to store ffmpeg
     if not os.path.exists(ffmpeg_dir):
         os.makedirs(ffmpeg_dir)
     
-    ffmpeg_tar = os.path.join(ffmpeg_dir, "ffmpeg.tar.xz")
+    ffmpeg_zip = os.path.join(ffmpeg_dir, "ffmpeg.zip")
     
-    # Download ffmpeg tar file
+    # Download ffmpeg zip file
     with requests.get(url, stream=True) as r:
-        with open(ffmpeg_tar, 'wb') as f:
+        with open(ffmpeg_zip, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
     
-    # Extract the tar file
-    with tarfile.open(ffmpeg_tar, "r:xz") as tar:
-        tar.extractall(path=ffmpeg_dir)
+    # Extract the zip file
+    with zipfile.ZipFile(ffmpeg_zip, "r") as zip_ref:
+        zip_ref.extractall(ffmpeg_dir)
     
     # Find the ffmpeg binary
     for root, dirs, files in os.walk(ffmpeg_dir):
