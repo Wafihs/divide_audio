@@ -65,8 +65,8 @@ def main():
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: white;
-            color: black;
+            background-color: var(--primary-background-color);
+            color: var(--primary-color);
             text-align: center;
         }
         </style>
