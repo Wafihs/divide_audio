@@ -5,7 +5,6 @@ from pydub import AudioSegment
 from io import BytesIO
 
 ##Work
-@st.cache_data
 def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
     segments = []
     part_duration = len(audio) // num_parts
