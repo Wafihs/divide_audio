@@ -2,6 +2,7 @@ import streamlit as st
 from pydub import AudioSegment
 from io import BytesIO
 
+
 def save_audio_segments(audio, interval, filename_prefix, audio_format):
     segments = []
     for i in range(0, len(audio), interval):
@@ -16,7 +17,8 @@ def main():
     # Initialize session state for segments if not already present
     if 'segments' not in st.session_state:
         st.session_state.segments = []
-
+    
+    AudioSegment.ffmpeg = "/absolute/path/to/ffmpeg"
     # File upload
     uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "flac", "ogg", "aac", "wma", "m4a"])
 
