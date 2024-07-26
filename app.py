@@ -33,7 +33,7 @@ ffmpeg_path = os.popen("which ffmpeg").read().strip()
 if ffmpeg_path:
     st.write(f"FFmpeg is available at: {ffmpeg_path}")
 else:
-    st.write("FFmpeg is not installed.")
+    st.write("FFmpeg is not installed 1.")
 
 
 # Check if FFmpeg is available
@@ -42,7 +42,7 @@ try:
     if ffmpeg_path:
         st.write(f"FFmpeg is available at: {ffmpeg_path}")
     else:
-        st.write("FFmpeg is not installed.")
+        st.write("FFmpeg is not installed 2.")
     
     # Display environment variables
     st.write("Environment Variables:")
