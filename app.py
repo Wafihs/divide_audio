@@ -7,6 +7,24 @@ from io import BytesIO
 if not os.path.exists("/usr/bin/ffmpeg"):
     os.system("apt-get update && apt-get install -y ffmpeg")
 
+# Check if FFmpeg is available
+try:
+    ffmpeg_path = os.popen("which ffmpeg").read().strip()
+    if ffmpeg_path:
+        st.write(f"FFmpeg is available at: {ffmpeg_path}")
+    else:
+        st.write("FFmpeg is not installed.")
+    
+    # Display environment variables
+    st.write("Environment Variables:")
+    st.write(os.environ)
+    
+    # Display installed packages
+    st.write("Installed Packages:")
+    st.write(os.popen("pip freeze").read())
+except Exception as e:
+    st.write(f"An error occurred: {e}")
+
 def save_audio_segments(audio, interval, filename_prefix, audio_format):
     segments = []
     for i in range(0, len(audio), interval):

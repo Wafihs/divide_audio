@@ -2,3 +2,6 @@ streamlit
 pydub
 ffmpeg
 ffprobe
+libsm6
+libext6
+libgl1-mesa-glx
