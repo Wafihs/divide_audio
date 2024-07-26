@@ -13,6 +13,10 @@ def save_audio_segments(audio, interval, filename_prefix, audio_format):
 def main():
     st.title("Audio File Divider")
 
+    # Initialize session state for segments if not already present
+    if 'segments' not in st.session_state:
+        st.session_state.segments = []
+
     # File upload
     uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "flac", "ogg", "aac", "wma", "m4a"])
 
@@ -32,14 +36,16 @@ def main():
         interval_ms = interval_min * 60 * 1000
 
         if st.button("Divide"):
-            segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
+            st.session_state.segments = save_audio_segments(audio, interval_ms, uploaded_file.name.split('.')[0], file_format)
 
-            # Provide download links for the segments
-            for segment, filename in segments:
-                buffer = BytesIO()
-                segment.export(buffer, format=file_format)
-                buffer.seek(0)
-                st.download_button(label=f"Download {filename}", data=buffer, file_name=filename, mime=f"audio/{file_format}")
+    # Provide download links for the segments
+    if st.session_state.segments:
+        st.subheader("Download Segments")
+        for segment, filename in st.session_state.segments:
+            buffer = BytesIO()
+            segment.export(buffer, format=filename.split('.')[-1])
+            buffer.seek(0)
+            st.download_button(label=f"Download {filename}", data=buffer, file_name=filename, mime=f"audio/{filename.split('.')[-1]}")
 
 if __name__ == "__main__":
     main()
