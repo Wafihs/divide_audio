@@ -5,7 +5,7 @@ from io import BytesIO
 
 # Run setup script to install ffmpeg if it's not already installed
 if not os.path.exists("/usr/bin/ffmpeg"):
-    os.system("chmod +x setup.sh && ./setup.sh")
+    os.system("apt-get update && apt-get install -y ffmpeg")
 
 def save_audio_segments(audio, interval, filename_prefix, audio_format):
     segments = []
