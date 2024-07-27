@@ -16,11 +16,8 @@ def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
         segment_file = f"{filename_prefix}_part_{i + 1}.{audio_format}"
         segments.append((segment, segment_file))
         time.sleep(10)
-<<<<<<< HEAD
         st.write("Inside loop")
-=======
-        st.write("Here")
->>>>>>> 57ddebce1f7ce8426c793fd3bc15030236aa37f9
+        check4=st.number_input("Continue 4?")
     return segments
 
 def main():
@@ -47,20 +44,17 @@ def main():
         # Read audio file from uploaded file
         try:
             audio = AudioSegment.from_file(temp_file_path, format=file_format)
-
+            check1=st.number_input("Continue 1?")
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
 
             num_parts=st.number_input("Enter number of parts (2-4)", min_value=2, max_value=10)
-<<<<<<< HEAD
             st.write(f"Audio duration: {duration} seconds")
+            check2=st.number_input("Continue 2?")
 
             if st.button("Divide"):
+                check3=st.number_input("Continue 3?")
                 st.write(f"Audio duration: {duration} seconds")
-=======
-
-            if st.button("Divide"):
->>>>>>> 57ddebce1f7ce8426c793fd3bc15030236aa37f9
                 st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
                 os.remove(temp_file_path)
 
