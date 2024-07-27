@@ -28,15 +28,21 @@ def main():
         st.session_state.segments = []
     if 'num_parts' not in st.session_state:
         st.session_state.num_parts = 2
+    if 'audio' not in st.session_state:
+        st.session_state.audio = None
+    if 'file_format' not in st.session_state:
+        st.session_state.file_format = None
+    if 'file_name' not in st.session_state:
+        st.session_state.file_name = ""
+    if 'duration' not in st.session_state:
+        st.session_state.duration = None
 
     # File upload
     uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "flac", "ogg", "aac", "wma", "m4a"])
 
     if uploaded_file is not None:
         # Determine the format of the uploaded file
-        file_details = {"FileName": uploaded_file.name, "FileType": uploaded_file.type}
-        st.write(file_details)
-
+        st.session_state.filename = {"FileName": uploaded_file.name, "FileType": uploaded_file.type}
         file_format = uploaded_file.name.split('.')[-1]
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file_format}") as temp_file:
@@ -45,18 +51,9 @@ def main():
 
         # Read audio file from uploaded file
         try:
-            audio = AudioSegment.from_file(temp_file_path, format=file_format)
+            st.session_state.audio = AudioSegment.from_file(temp_file_path, format=file_format)
+            st.session_state.file_format = file_format
             check1=st.number_input("Continue 1?")
-            # Get duration of the audio in seconds
-            duration = len(audio) // 1000
-
-            st.session_state.num_parts=st.number_input("Enter number of parts", min_value=2, max_value=10, value=st.session_state.num_parts)
-            check2=st.number_input("Continue 2?")
-
-            if st.button("Divide"):
-                check3=st.number_input("Continue 3?")
-                st.session_state.segments = save_audio_segments(audio, st.session_state.num_parts, uploaded_file.name.split('.')[0], file_format)
-                os.remove(temp_file_path)
 
         except Exception as e:
             st.error(f"Error processing audio file: {e} Error type: {type(e).__name__}")
@@ -64,6 +61,16 @@ def main():
                 os.remove(temp_file_path)
         finally:
             if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
+        # Get duration of the audio in seconds
+            st.session_state.duration = len(audio) // 1000
+
+            st.session_state.num_parts=st.number_input("Enter number of parts", min_value=2, max_value=10, value=st.session_state.num_parts)
+            check2=st.number_input("Continue 2?")
+
+            if st.button("Divide") and st.session_state.audio:
+                check3=st.number_input("Continue 3?")
+                st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.filename.split('.')[0], st.session_state.file_format)
                 os.remove(temp_file_path)
 
     # Provide download links for the segments
