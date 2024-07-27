@@ -63,17 +63,17 @@ def main():
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
         # Get duration of the audio in seconds
-            st.session_state.duration = len(st.session_state.audio) // 1000
+        st.session_state.duration = len(st.session_state.audio) // 1000
 
-            num_parts_input=st.number_input("Enter number of parts", min_value=2, max_value=10, value=st.session_state.num_parts)
+        num_parts_input=st.number_input("Enter number of parts", min_value=2, max_value=10, value=st.session_state.num_parts)
 
-            if st.button("Set Number of Parts"):
-              st. session_state.num_parts = num_parts_input
+        if st.button("Set Number of Parts"):
+          st. session_state.num_parts = num_parts_input
               
-            if st.button("Divide") and st.session_state.audio:
-                check3=st.number_input("Continue 3?")
-                st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.filename.split('.')[0], st.session_state.file_format)
-                os.remove(temp_file_path)
+    if st.button("Divide") and st.session_state.audio:
+      check3=st.number_input("Continue 3?")
+      st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.filename.split('.')[0], st.session_state.file_format)
+      os.remove(temp_file_path)
 
     # Provide download links for the segments
     if st.session_state.segments:
