@@ -72,7 +72,7 @@ def main():
               
     if st.button("Divide") and st.session_state.audio:
       check3=st.number_input("Continue 3?")
-      st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.file_name.split('.')[0], st.session_state.file_format)
+      st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, uploaded_file.name.split('.')[0], st.session_state.file_format)
       os.remove(temp_file_path)
 
     # Provide download links for the segments
