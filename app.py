@@ -11,8 +11,8 @@ def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
     part_duration = len(audio) // num_parts
     for i in range(num_parts):
         start_time = i * part_duration
-        end_time = (i + 1) * part_duration if i != num_parts - 1 else len(audio)
-        segment = audio[start_time:end_time]
+        end_time = (i + 1) * part_duration if i != num_parts - 1 else len(st.session_state.audio)
+        segment = st.session_state.audio[start_time:end_time]
         segment_file = f"{filename_prefix}_part_{i + 1}.{audio_format}"
         segments.append((segment, segment_file))
         time.sleep(10)
@@ -42,7 +42,7 @@ def main():
 
     if uploaded_file is not None:
         # Determine the format of the uploaded file
-        st.session_state.filename = {"FileName": uploaded_file.name, "FileType": uploaded_file.type}
+        st.session_state.file_name = {"FileName": uploaded_file.name, "FileType": uploaded_file.type}
         file_format = uploaded_file.name.split('.')[-1]
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file_format}") as temp_file:
@@ -72,7 +72,7 @@ def main():
               
     if st.button("Divide") and st.session_state.audio:
       check3=st.number_input("Continue 3?")
-      st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.filename.split('.')[0], st.session_state.file_format)
+      st.session_state.segments = save_audio_segments(st.session_state.audio, st.session_state.num_parts, st.session_state.file_name.split('.')[0], st.session_state.file_format)
       os.remove(temp_file_path)
 
     # Provide download links for the segments
