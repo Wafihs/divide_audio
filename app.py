@@ -26,6 +26,8 @@ def main():
     # Initialize session state for segments if not already present
     if 'segments' not in st.session_state:
         st.session_state.segments = []
+    if 'num_parts' not in st.session_state:
+        st.session_state.num_parts = 2
 
     # File upload
     uploaded_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "flac", "ogg", "aac", "wma", "m4a"])
@@ -48,14 +50,12 @@ def main():
             # Get duration of the audio in seconds
             duration = len(audio) // 1000
 
-            num_parts=st.number_input("Enter number of parts (2-4)", min_value=2, max_value=10)
-            st.write(f"Audio duration: {duration} seconds")
+            st.session_state.num_parts=st.number_input("Enter number of parts", min_value=2, max_value=10, value=st.session_state.num_parts)
             check2=st.number_input("Continue 2?")
 
             if st.button("Divide"):
                 check3=st.number_input("Continue 3?")
-                st.write(f"Audio duration: {duration} seconds")
-                st.session_state.segments = save_audio_segments(audio, num_parts, uploaded_file.name.split('.')[0], file_format)
+                st.session_state.segments = save_audio_segments(audio, st.session_state.num_parts, uploaded_file.name.split('.')[0], file_format)
                 os.remove(temp_file_path)
 
         except Exception as e:
