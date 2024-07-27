@@ -15,7 +15,7 @@ def save_audio_segments(audio, num_parts, filename_prefix, audio_format):
         segment = audio[start_time:end_time]
         segment_file = f"{filename_prefix}_part_{i + 1}.{audio_format}"
         segments.append((segment, segment_file))
-        time.sleep(0.1)
+        time.sleep(5)
     return segments
 
 def main():
